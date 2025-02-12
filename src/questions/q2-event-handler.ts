@@ -7,13 +7,5 @@
  * 3. Maintains event history
  */
 export function createEventHandler<T extends HTMLElement>() {
-  const eventHistory: Event[] = [];
-
-  return {
-    onClick: (event: MouseEvent) => {
-      eventHistory.push(event);
-    },
-    getLastEvent: () => eventHistory[eventHistory.length - 1],
-    getAllEvents: () => eventHistory,
-  };
+  // TODO: Implement the function
 }

@@ -16,10 +16,4 @@ export interface AsyncState<T> {
 
 export function useAsync<T>() {
   // TODO: Implement the hook logic
-  return {
-    state: { data: null, loading: false, error: null } as AsyncState<T>,
-    execute: async (promise: Promise<T>) => {},
-    retry: () => {},
-    reset: () => {},
-  };
 }

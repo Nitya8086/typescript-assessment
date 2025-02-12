@@ -8,15 +8,5 @@
  */
 
 export function createComponent<Props>() {
-  let props: Props | undefined;
-
-  return {
-    setProps: (newProps: Props) => {
-      props = newProps;
-    },
-    build: () => {
-      if (!props) throw new Error("Props not set");
-      return { props };
-    },
-  };
+  // TODO: Implement the function
 }
