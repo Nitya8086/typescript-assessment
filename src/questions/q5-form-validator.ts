@@ -1,13 +1,24 @@
 import { ValidationRule, FormField } from "../types";
-
-/**
- * Question 5: Form Validation
- *
- * Implement a type-safe form validator that:
- * 1. Validates multiple fields with different rules
- * 2. Returns typed validation results
- * 3. Supports custom validation rules
- */
 export function createFormValidator(rules: Record<string, ValidationRule[]>) {
-  // TODO: Implement the function
+  return function validateForm(formData: Record<string, any>) {
+    const errors: Record<string, string[]> = {}; 
+    for (const field in rules) {
+      const fieldRules = rules[field];
+      const value = formData[field];
+      const fieldErrors: string[] = [];
+      fieldRules.forEach((rule) => {
+        const errorMessage = rule.validate(value);
+        if (errorMessage) {
+          fieldErrors.push(errorMessage);
+        }
+      });
+      if (fieldErrors.length > 0) {
+        errors[field] = fieldErrors;
+      }
+    }
+    return {
+      isValid: Object.keys(errors).length === 0,
+      errors,
+    };
+  };
 }
