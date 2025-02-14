@@ -8,5 +8,17 @@
  */
 
 export function createComponent<Props>() {
-  // TODO: Implement the function
+  let props: Props | null = null; 
+
+  return {
+    setProps(newProps: Props) {
+      props = newProps; 
+    },
+    build(): Props {
+      if (props === null) {
+        throw new Error("Props are not set");
+      }
+      return props; 
+    },
+  };
 }
