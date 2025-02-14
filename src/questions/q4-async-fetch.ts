@@ -10,6 +10,8 @@ import { ApiResponse } from "../types";
  * 4. Includes timeout support
  */
 
+import { ApiResponse } from "../types";
+
 export async function fetchWithRetry<T>(
   url: string,
   options?: {
@@ -17,5 +19,33 @@ export async function fetchWithRetry<T>(
     timeout?: number;
   }
 ): Promise<ApiResponse<T>> {
-  // TODO: Implement the function
+  const retries = options?.retries ?? 3; 
+  const timeout = options?.timeout ?? 5000; 
+
+  async function fetchData(attempt: number): Promise<ApiResponse<T>> {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      const data: T = await response.json();
+      return { success: true, data }; 
+
+    } catch (error) {
+      if (attempt < retries) {
+        console.warn(`Retrying (${attempt + 1}/${retries}) due to error:`, error);
+        return fetchData(attempt + 1); 
+      }
+
+      return { success: false, error: (error as Error).message }; 
+    }
+  }
+
+  return fetchData(0);
 }
