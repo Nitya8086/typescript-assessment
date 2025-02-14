@@ -7,5 +7,15 @@
  * 3. Maintains event history
  */
 export function createEventHandler<T extends HTMLElement>() {
-  // TODO: Implement the function
+  let eventHistory: MouseEvent[] = []; 
+
+  return {
+    handleEvent(event: MouseEvent, element: T) {
+      console.log(`Event: ${event.type} on ${element.tagName}`);
+      eventHistory.push(event); 
+    },
+    getHistory() {
+      return eventHistory; 
+    },
+  };
 }
